@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sales-forecasting"
+version = "1.0.0"
+description = "End-to-end ML pipeline for multivariate time series store sales forecasting using LightGBM and Darts."
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Ankit Kumar", email = "ankit.aiml625@gmail.com" }
+]
+requires-python = ">=3.12"
+keywords = ["machine-learning", "time-series", "forecasting", "lightgbm", "darts", "fastapi"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "fastapi>=0.111.0",
+    "uvicorn[standard]>=0.29.0",
+    "pandas>=2.2.0,<3.0",
+    "numpy>=1.26.4,<2.0",
+    "scikit-learn>=1.4.0",
+    "hampel>=1.0.0",
+    "darts>=0.29.0",
+    "lightgbm>=4.3.0",
+    "psycopg2-binary>=2.9.9",
+    "sqlalchemy>=2.0.20",
+    "python-dotenv>=1.0.0",
+    "dvc>=3.50.0",
+    "joblib>=1.4.0",
+    "pyyaml>=6.0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-asyncio",
+    "httpx",
+    "flake8",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Ankitkumar1141/Sales-Forecasting"
+"Bug Tracker" = "https://github.com/Ankitkumar1141/Sales-Forecasting/issues"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+[tool.flake8]
+max-line-length = 120
+exclude = [".git", "__pycache__", "research/", ".dvc/"]
