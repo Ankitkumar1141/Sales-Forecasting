@@ -1,0 +1,69 @@
+# ============================================================
+# Project Configuration
+# Sales Forecasting — ML Pipeline
+# ============================================================
+
+# ------ Data Ingestion ------
+data_ingestion:
+  artifacts_dir: artifacts
+  raw_data: artifacts/raw_data.csv
+  oil_data: artifacts/oil.csv
+  stores_data: artifacts/stores.csv
+  holidays_data: artifacts/holidays.csv
+  postgresql:
+    # Credentials are read from secrets.env — do NOT hardcode them here.
+    # Set PG_HOST, PG_PORT, PG_DATABASE, PG_USER, PG_PASSWORD in secrets.env.
+    default_port: 5432
+    sslmode: require          # use "disable" for local dev without SSL
+    tables:
+      sales: store_sales
+      oil: oil_prices
+      stores: stores
+      holidays: holidays
+
+# ------ Data Transformation ------
+data_transformation:
+  processed_data: artifacts/processed_data.csv
+  train_data: artifacts/train_data.csv
+  test_data: artifacts/test_data.csv
+  timeseries_data: artifacts/timeseries_data.joblib
+  testseries_data: artifacts/testseries_data.joblib
+  covariates: artifacts/covariates.joblib
+  test_covariates: artifacts/test_covariates.joblib
+  number_of_test_days: 15
+
+# ------ Model Trainer ------
+model_trainer:
+  oil_model: artifacts/oil_model.joblib
+  trained_model: artifacts/trained_model.joblib
+  oil_model_params:
+    lags: 25
+    output_chunk_length: 1
+    n_estimators: 500
+    verbosity: 0
+  sales_model_params:
+    lags: [-1, -2, -6, -7, -8, -13, -14, -15, -20, -21, -27, -28, -35, -42, -49, -56, -63]
+    lags_past_covariates: [-1, -2, -6, -7, -8, -13, -14, -15, -20, -21, -27, -28, -35]
+    output_chunk_length: 1
+    n_estimators: 1000
+    verbosity: 0
+
+# ------ Model Evaluation ------
+model_evaluation:
+  results_json: artifacts/results.json
+  thresholds:
+    max_mse: 0.15             # Quality gate: Maximum permissible normalized MSE
+    max_mae: 0.25             # Quality gate: Maximum permissible normalized MAE
+
+# ------ Prediction ------
+prediction:
+  max_forecast_horizon: 30
+
+# ------ API ------
+api:
+  host: 0.0.0.0
+  port: 8000
+  title: Sales Forecasting API
+  description: >
+    LightGBM-based multivariate time series forecasting API for store sales prediction.
+  version: "1.0.0"
